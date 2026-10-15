@@ -1,0 +1,13 @@
+{
+  "name": "nethaji-tea-company",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack e-commerce web application for Nethaji Tea Company",
+  "scripts": {
+    "server": "npm run start --prefix server",
+    "server:dev": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "client:build": "npm run build --prefix client",
+    "seed:all": "npm run seed:all --prefix server"
+  }
+}
