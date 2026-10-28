@@ -9,6 +9,7 @@ const EMPTY_FORM = {
   discountValue: '',
   minOrderValue: '',
   expiryDate:    '',
+  firstOrderOnly: false,
   isActive:      true,
 }
 
@@ -24,6 +25,7 @@ function CouponModal({ coupon, onClose, onSaved }) {
           discountValue: String(coupon.discountValue),
           minOrderValue: String(coupon.minOrderValue),
           expiryDate:    coupon.expiryDate?.split('T')[0] || '',
+          firstOrderOnly: !!coupon.firstOrderOnly,
           isActive:      coupon.isActive,
         }
       : { ...EMPTY_FORM }
@@ -43,6 +45,7 @@ function CouponModal({ coupon, onClose, onSaved }) {
       discountValue: parseFloat(form.discountValue),
       minOrderValue: parseFloat(form.minOrderValue) || 0,
       expiryDate:    form.expiryDate,
+      firstOrderOnly: !!form.firstOrderOnly,
       isActive:      form.isActive,
     }
 
@@ -126,6 +129,18 @@ function CouponModal({ coupon, onClose, onSaved }) {
               />
               <label htmlFor="coupon-active-toggle" className="form-label" style={{ cursor: 'pointer', marginBottom: 0 }}>
                 Active
+              </label>
+            </div>
+            <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', gridColumn: 'span 2' }}>
+              <input
+                type="checkbox"
+                id="coupon-first-order-toggle"
+                className="checkbox-custom"
+                checked={form.firstOrderOnly}
+                onChange={(e) => setForm((p) => ({ ...p, firstOrderOnly: e.target.checked }))}
+              />
+              <label htmlFor="coupon-first-order-toggle" className="form-label" style={{ cursor: 'pointer', marginBottom: 0 }}>
+                ✨ First Order Only (Valid for 1st purchase alone)
               </label>
             </div>
           </div>
@@ -246,6 +261,22 @@ export default function AdminCoupons() {
                       >
                         {coupon.code}
                       </span>
+                      {coupon.firstOrderOnly && (
+                        <span
+                          style={{
+                            marginLeft: '0.5rem',
+                            fontSize: '0.6875rem',
+                            fontWeight: 700,
+                            color: '#854d0e',
+                            background: '#fef9c3',
+                            padding: '0.15rem 0.4rem',
+                            borderRadius: 4,
+                            border: '1px solid #fde047',
+                          }}
+                        >
+                          1st Order Only
+                        </span>
+                      )}
                     </td>
                     <td>
                       {coupon.discountType === 'percent'

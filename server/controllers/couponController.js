@@ -1,4 +1,5 @@
 const Coupon = require('../models/Coupon');
+const Order = require('../models/Order');
 
 // ─── POST /api/coupons/apply ──────────────────────────────────────────────────
 const applyCoupon = async (req, res) => {
@@ -17,6 +18,22 @@ const applyCoupon = async (req, res) => {
       });
     }
 
+    // Check first-order restriction
+    if (coupon.firstOrderOnly) {
+      if (!req.user) {
+        return res.status(401).json({ message: 'Please login to use this coupon' });
+      }
+      const previousOrdersCount = await Order.countDocuments({
+        user: req.user._id,
+        status: { $ne: 'Cancelled' },
+      });
+      if (previousOrdersCount > 0) {
+        return res.status(400).json({
+          message: 'This coupon is valid only on your 1st purchase',
+        });
+      }
+    }
+
     const discount =
       coupon.discountType === 'percent'
         ? Math.min((orderAmount * coupon.discountValue) / 100, orderAmount)
@@ -29,6 +46,7 @@ const applyCoupon = async (req, res) => {
         discountType: coupon.discountType,
         discountValue: coupon.discountValue,
         discount,
+        firstOrderOnly: coupon.firstOrderOnly,
       },
     });
   } catch (error) {
@@ -49,7 +67,7 @@ const getAllCoupons = async (req, res) => {
 // ─── POST /api/coupons (admin) ────────────────────────────────────────────────
 const createCoupon = async (req, res) => {
   try {
-    const { code, discountType, discountValue, minOrderValue, expiryDate, isActive } = req.body;
+    const { code, discountType, discountValue, minOrderValue, expiryDate, firstOrderOnly, isActive } = req.body;
     if (!code || !discountType || !discountValue || !expiryDate) {
       return res.status(400).json({ message: 'code, discountType, discountValue, and expiryDate are required' });
     }
@@ -63,6 +81,7 @@ const createCoupon = async (req, res) => {
       discountValue,
       minOrderValue: minOrderValue || 0,
       expiryDate,
+      firstOrderOnly: !!firstOrderOnly,
       isActive: isActive !== false,
     });
 

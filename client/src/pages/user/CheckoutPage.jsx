@@ -323,6 +323,40 @@ export default function CheckoutPage() {
                     {/* Coupon */}
                     <div className="divider" />
                     <h3 style={{ fontWeight: 600, fontSize: '0.9375rem', marginBottom: '0.25rem' }}>🏷️ Coupon Code</h3>
+
+                    {/* 1st Purchase Offer Banner */}
+                    <div
+                      style={{
+                        background: '#fefce8',
+                        border: '1px dashed #ca8a04',
+                        borderRadius: 6,
+                        padding: '0.6rem 0.8rem',
+                        marginBottom: '0.75rem',
+                        fontSize: '0.8125rem',
+                        color: '#854d0e',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      <div>
+                        <span>✨ <strong>1st Purchase Offer:</strong> Get <strong>15% OFF</strong> on orders above ₹150 with code <strong>FIRST15</strong></span>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn btn-ghost btn-sm"
+                        style={{ color: '#ca8a04', fontWeight: 700, padding: '0.2rem 0.5rem', height: 'auto', textDecoration: 'underline' }}
+                        onClick={() => {
+                          setCouponCode('FIRST15');
+                          setCouponError('');
+                          setCouponResult(null);
+                        }}
+                      >
+                        Use Code
+                      </button>
+                    </div>
+
                     <div className="coupon-row">
                       <input
                         id="coupon-input"

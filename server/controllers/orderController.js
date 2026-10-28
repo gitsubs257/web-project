@@ -53,14 +53,27 @@ const createOrder = async (req, res) => {
     let discount = 0;
     let appliedCoupon = '';
     if (couponCode) {
-      const coupon = await Coupon.findOne({ code: couponCode.toUpperCase(), isActive: true });
+      const coupon = await Coupon.findOne({ code: couponCode.toUpperCase().trim(), isActive: true });
       if (coupon && new Date(coupon.expiryDate) >= new Date() && subtotal >= coupon.minOrderValue) {
-        appliedCoupon = coupon.code;
-        discount =
-          coupon.discountType === 'percent'
-            ? (subtotal * coupon.discountValue) / 100
-            : coupon.discountValue;
-        discount = Math.min(discount, subtotal); // cap at subtotal
+        let isEligible = true;
+        if (coupon.firstOrderOnly) {
+          const previousOrdersCount = await Order.countDocuments({
+            user: req.user._id,
+            status: { $ne: 'Cancelled' },
+          });
+          if (previousOrdersCount > 0) {
+            isEligible = false;
+          }
+        }
+
+        if (isEligible) {
+          appliedCoupon = coupon.code;
+          discount =
+            coupon.discountType === 'percent'
+              ? (subtotal * coupon.discountValue) / 100
+              : coupon.discountValue;
+          discount = Math.min(discount, subtotal); // cap at subtotal
+        }
       }
     }
 
