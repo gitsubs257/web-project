@@ -28,3 +28,5 @@ Thumbs.db
 # ── Uploads (runtime files, not source) ───────────────────
 server/uploads/*
 !server/uploads/.gitkeep
+
+.vercel

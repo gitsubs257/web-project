@@ -8,7 +8,7 @@
     "server"
   ],
   "scripts": {
-    "build": "npm run build --prefix client",
+    "build": "npm run build --workspace=client",
     "server": "npm run start --prefix server",
     "server:dev": "npm run dev --prefix server",
     "client": "npm run dev --prefix client",
