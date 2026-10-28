@@ -404,7 +404,7 @@ export default function HomePage() {
               </p>
               <div>
                 <span className="vip-coupon-pill">
-                  <span>🏷️</span> Use Code: <strong>WELCOME10</strong> (10% OFF)
+                  <span>🏷️</span> 1st Purchase Code: <strong>FIRST15</strong> (15% OFF on ₹150+)
                 </span>
               </div>
             </div>

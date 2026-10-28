@@ -64,6 +64,17 @@ export default function Footer() {
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem' }}>
+                <span style={{ fontSize: '1.1rem' }}>📍</span>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#a8a29e', textTransform: 'uppercase' }}>Address</div>
+                  <div style={{ color: '#d6d3d1', lineHeight: 1.5 }}>
+                    Nethaji Nagar, Oddanchatram,<br />
+                    Dindigul, Tamil Nadu – 624619
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem' }}>
                 <span style={{ fontSize: '1.1rem' }}>📞</span>
                 <div>
                   <div style={{ fontSize: '0.75rem', color: '#a8a29e', textTransform: 'uppercase' }}>Phone / WhatsApp</div>
