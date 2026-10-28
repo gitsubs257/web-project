@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import LoadingSpinner from '../../components/common/LoadingSpinner.jsx'
 import { useToast } from '../../context/ToastContext.jsx'
 import { getAllProductsAdmin, createProduct, updateProduct, deleteProduct } from '../../services/api.js'
-
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+import { getImageUrl } from '../../utils/imageUrl.js'
 const EMPTY_VARIANT = { weight: '', price: '', stock: '' }
 
 function ProductModal({ product, onClose, onSaved }) {
@@ -21,7 +20,7 @@ function ProductModal({ product, onClose, onSaved }) {
     || [{ ...EMPTY_VARIANT }]
   )
   const [imageFile, setImageFile] = useState(null)
-  const [previewUrl, setPreviewUrl] = useState(product?.image ? `${BACKEND_URL}/${product.image}` : null)
+  const [previewUrl, setPreviewUrl] = useState(getImageUrl(product?.image))
   const [saving, setSaving] = useState(false)
 
   const handleImageChange = (e) => {
@@ -323,7 +322,7 @@ export default function AdminProducts() {
                   <td>
                     {prod.image ? (
                       <img
-                        src={`${BACKEND_URL}/${prod.image}`}
+                        src={getImageUrl(prod.image)}
                         alt={prod.name}
                         style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 6 }}
                       />

@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { useCart } from '../../context/CartContext.jsx'
 import { useToast } from '../../context/ToastContext.jsx'
-
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+import { getImageUrl } from '../../utils/imageUrl.js'
 
 /**
  * ProductCard — shown on the home page grid.
@@ -20,9 +19,7 @@ export default function ProductCard({ product }) {
   const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0] || null)
   const [adding, setAdding] = useState(false)
 
-  const imageUrl = product.image
-    ? `${BACKEND_URL}/${product.image}`
-    : null
+  const imageUrl = getImageUrl(product.image)
 
   const handleVariantChange = (e) => {
     const variant = product.variants.find((v) => v.weight === e.target.value)

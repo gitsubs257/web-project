@@ -7,8 +7,7 @@ import { getProductById } from '../../services/api.js'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { useCart } from '../../context/CartContext.jsx'
 import { useToast } from '../../context/ToastContext.jsx'
-
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+import { getImageUrl } from '../../utils/imageUrl.js'
 
 export default function ProductDetailPage() {
   const { id } = useParams()
@@ -59,7 +58,7 @@ export default function ProductDetailPage() {
   if (loading) return <><Navbar /><div className="page-wrapper"><LoadingSpinner /></div></>
   if (!product) return null
 
-  const imageUrl = product.image ? `${BACKEND_URL}/${product.image}` : null
+  const imageUrl = getImageUrl(product.image)
   const isOutOfStock = !selectedVariant || selectedVariant.stock < 1
 
   return (

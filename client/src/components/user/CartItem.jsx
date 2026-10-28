@@ -1,7 +1,6 @@
 import { useCart } from '../../context/CartContext.jsx'
 import { useToast } from '../../context/ToastContext.jsx'
-
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+import { getImageUrl } from '../../utils/imageUrl.js'
 
 /**
  * CartItem — single row in the Cart page.
@@ -12,7 +11,7 @@ export default function CartItem({ item, selected, onToggleSelect }) {
   const { showToast } = useToast()
 
   const product = item.product
-  const imageUrl = product?.image ? `${BACKEND_URL}/${product.image}` : null
+  const imageUrl = getImageUrl(product?.image)
   const variant = product?.variants?.find((v) => v.weight === item.variantWeight)
   const price = variant?.price ?? 0
 
