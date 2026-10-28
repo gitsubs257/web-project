@@ -50,8 +50,18 @@ export default function ProductCard({ product }) {
 
   const isOutOfStock = !selectedVariant || selectedVariant.stock < 1
 
+  const getBadgeText = (name = '') => {
+    if (name.includes('Varam')) return '👑 Signature Reserve'
+    if (name.includes('Rose')) return '🌹 Floral Infused'
+    if (name.includes('Masala')) return '🌶️ Spiced Malty'
+    if (name.includes('Green')) return '🍃 100% Whole Leaf'
+    if (name.includes('Subash')) return '🏆 Estate Heritage'
+    return '🍃 Artisanal Blend'
+  }
+
   return (
     <article className="product-card">
+      <span className="product-card-badge">{getBadgeText(product.name)}</span>
       {/* Image */}
       <div
         className="product-card-image-wrap"
@@ -77,7 +87,13 @@ export default function ProductCard({ product }) {
 
       {/* Body */}
       <div className="product-card-body">
-        <span className="product-card-category">{product.category}</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span className="product-card-category">{product.category}</span>
+          <div style={{ fontSize: '0.72rem', color: '#eab308', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <span>★★★★★</span>
+            <span style={{ color: 'var(--gray-500)', fontSize: '0.68rem', fontWeight: 600 }}>4.9</span>
+          </div>
+        </div>
         <h3
           className="product-card-name"
           onClick={() => navigate(`/products/${product._id}`)}

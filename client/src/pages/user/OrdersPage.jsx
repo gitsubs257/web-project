@@ -68,55 +68,68 @@ function OrderCard({ order, onCancelClick }) {
     !isApprovedCancel
 
   return (
-    <div className="card" style={{ marginBottom: '1rem' }}>
+    <div className="order-card-luxury">
       <div
         className="card-header"
-        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 1.25rem', background: '#fafaf9' }}
         onClick={() => setExpanded((p) => !p)}
       >
-        <div>
-          <span style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--gray-400)', fontWeight: 400 }}>
-            #{order._id.slice(-10)}
-          </span>
-          <div style={{ fontSize: '0.875rem', color: 'var(--gray-600)', marginTop: 2 }}>
-            {new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-            {' · '}
-            <strong>₹{order.totalAmount.toFixed(0)}</strong>
-            {' · '}
-            {order.paymentMethod}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <span className="order-id-chip">
+              #{order._id.slice(-8).toUpperCase()}
+            </span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--gray-500)', fontWeight: 500 }}>
+              {new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+            </span>
+          </div>
+          <div style={{ fontSize: '0.9375rem', color: 'var(--tea-deep)', marginTop: 2, display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <strong style={{ fontSize: '1.1rem', color: 'var(--tea-deep)', fontFamily: 'var(--font-display)' }}>
+              ₹{order.totalAmount.toFixed(0)}
+            </strong>
+            <span style={{ color: 'var(--gray-400)' }}>•</span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--gray-600)' }}>{order.paymentMethod}</span>
+            <span style={{ color: 'var(--gray-400)' }}>•</span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--gray-600)' }}>{order.items?.length || 1} item(s)</span>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <span
             className={`badge ${
               order.status === 'Delivered' ? 'badge-green'
               : isFailed ? 'badge-red'
               : 'badge-yellow'
             }`}
+            style={{ fontWeight: 600, padding: '0.35rem 0.75rem', fontSize: '0.8125rem' }}
           >
             {STATUS_ICONS[order.status]} {order.status}
           </span>
           {isPendingCancel && (
-            <span className="badge" style={{ background: '#fef3c7', color: '#92400e', border: '1px solid #fde68a' }}>
-              ⏳ Cancel Pending
+            <span className="badge" style={{ background: '#fef3c7', color: '#92400e', border: '1px solid #fde68a', fontWeight: 600 }}>
+              ⏳ Cancel Review
             </span>
           )}
-          <span style={{ color: 'var(--gray-400)', fontSize: '1.25rem' }}>
+          <span style={{ color: 'var(--tea-green)', fontSize: '1.1rem', width: 24, textAlign: 'center', fontWeight: 'bold' }}>
             {expanded ? '▲' : '▼'}
           </span>
         </div>
       </div>
 
       {expanded && (
-        <div className="card-body">
+        <div className="card-body" style={{ padding: '1.25rem' }}>
           {/* Tracking timeline (only for active orders) */}
           {!isFailed && (
             <>
-              <h4 style={{ fontWeight: 600, marginBottom: '0.5rem', fontSize: '0.875rem', color: 'var(--gray-700)' }}>
-                Order Status
-              </h4>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <h4 style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--tea-deep)', fontFamily: 'var(--font-display)' }}>
+                  Estate Direct Tracking
+                </h4>
+                <span style={{ fontSize: '0.75rem', color: 'var(--gold)', fontWeight: 600 }}>
+                  🍃 Upper Assam Dispatch
+                </span>
+              </div>
               <TrackingTimeline status={order.status} />
-              <div className="divider" />
+              <div className="divider" style={{ margin: '1rem 0' }} />
             </>
           )}
 
@@ -391,10 +404,19 @@ export default function OrdersPage() {
   return (
     <>
       <Navbar />
-      <main className="page-wrapper" style={{ paddingBottom: '4rem', minHeight: 'calc(100vh - 200px)' }}>
-        <div className="container" style={{ paddingTop: '2rem', maxWidth: 860 }}>
-          <h1 className="section-title" style={{ marginBottom: '0.25rem' }}>My Orders</h1>
-          <p className="section-subtitle">{orders.length} total orders</p>
+      <main className="page-wrapper" style={{ paddingBottom: '5rem', minHeight: 'calc(100vh - 200px)' }}>
+        <div className="container" style={{ paddingTop: '2.5rem', maxWidth: 880 }}>
+          {/* Luxury Page Header */}
+          <div className="luxury-page-header">
+            <h1 className="luxury-page-title">My Orders & Tea Reserves</h1>
+            <p className="luxury-page-subtitle">
+              Direct shipments handcrafted from the fertile Brahmaputra Valley, Upper Assam
+            </p>
+            <div className="luxury-gold-divider" />
+            <div style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: 'var(--gray-500)', fontWeight: 500 }}>
+              {orders.length} Total Order{orders.length !== 1 ? 's' : ''} on Record
+            </div>
+          </div>
 
           {/* Tabs */}
           <div className="order-tabs" role="tablist">
@@ -405,7 +427,7 @@ export default function OrdersPage() {
               className={`order-tab ${tab === 'current' ? 'active' : ''}`}
               onClick={() => setTab('current')}
             >
-              Current ({currentOrders.length})
+              Current & Dispatched ({currentOrders.length})
             </button>
             <button
               id="tab-delivered"
@@ -423,7 +445,7 @@ export default function OrdersPage() {
               className={`order-tab ${tab === 'failed' ? 'active' : ''}`}
               onClick={() => setTab('failed')}
             >
-              Failed / Cancelled ({failedOrders.length})
+              Cancelled / Returned ({failedOrders.length})
             </button>
           </div>
 

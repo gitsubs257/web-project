@@ -59,20 +59,25 @@ export default function AdminOrders() {
   return (
     <div>
       <div className="admin-page-header">
-        <h1 className="admin-page-title">Orders</h1>
-        <p className="admin-page-subtitle">{orders.length} total orders</p>
+        <h1 className="admin-page-title" style={{ fontFamily: 'var(--font-display)', color: 'var(--tea-deep)' }}>
+          Customer Orders & Dispatches
+        </h1>
+        <p className="admin-page-subtitle" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1rem' }}>
+          {orders.length} direct orders from Nethaji Upper Assam Tea estates
+        </p>
       </div>
 
       {/* Status filter */}
-      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '4px' }}>
         {['All', ...ORDER_STATUSES].map((s) => (
           <button
             key={s}
             id={`filter-order-${s.replace(/\s+/g, '-').toLowerCase()}`}
             className={`btn btn-sm ${filterStatus === s ? 'btn-primary' : 'btn-secondary'}`}
+            style={{ minHeight: '38px', borderRadius: 'var(--radius-full)', padding: '0.4rem 1rem' }}
             onClick={() => setFilterStatus(s)}
           >
-            {s}
+            {s} {s === 'All' ? `(${orders.length})` : `(${orders.filter((o) => o.status === s).length})`}
           </button>
         ))}
       </div>

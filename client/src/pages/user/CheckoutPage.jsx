@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Navbar from '../../components/common/Navbar.jsx'
+import Footer from '../../components/common/Footer.jsx'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { useCart } from '../../context/CartContext.jsx'
 import { useToast } from '../../context/ToastContext.jsx'
@@ -172,20 +173,27 @@ export default function CheckoutPage() {
   return (
     <>
       <Navbar />
-      <main className="page-wrapper" style={{ paddingBottom: '4rem' }}>
+      <main className="page-wrapper" style={{ paddingBottom: '5rem', minHeight: 'calc(100vh - 200px)' }}>
         <div className="container" style={{ paddingTop: '2.5rem' }}>
-          <h1 className="section-title" style={{ marginBottom: '2rem' }}>Checkout</h1>
+          {/* Luxury Page Header */}
+          <div className="luxury-page-header">
+            <h1 className="luxury-page-title">Estate Direct Checkout</h1>
+            <p className="luxury-page-subtitle">
+              Pure Upper Assam tea harvest • Direct estate packing & sealed dispatch
+            </p>
+            <div className="luxury-gold-divider" />
+          </div>
 
           {/* Step indicator */}
-          <div className="step-indicator" style={{ marginBottom: '2.5rem', maxWidth: 400 }}>
+          <div className="step-indicator" style={{ marginBottom: '2.5rem', maxWidth: 420, margin: '0 auto 2.5rem' }}>
             <div className={`step ${step >= 1 ? 'active' : ''}`}>
               <div className="step-circle">{step > 1 ? '✓' : '1'}</div>
-              <span className="step-label">Address</span>
+              <span className="step-label">Delivery Address</span>
             </div>
             <div className={`step-line ${step > 1 ? 'done' : ''}`} />
             <div className={`step ${step >= 2 ? 'active' : ''}`}>
               <div className="step-circle">2</div>
-              <span className="step-label">Payment</span>
+              <span className="step-label">Payment & Order</span>
             </div>
           </div>
 
@@ -402,6 +410,7 @@ export default function CheckoutPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   )
 }

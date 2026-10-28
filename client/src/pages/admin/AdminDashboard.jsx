@@ -63,38 +63,67 @@ export default function AdminDashboard() {
   return (
     <div>
       <div className="admin-page-header">
-        <h1 className="admin-page-title">Dashboard</h1>
-        <p className="admin-page-subtitle">Welcome to Nethaji Tea Company admin panel</p>
+        <h1 className="admin-page-title" style={{ fontFamily: 'var(--font-display)', color: 'var(--tea-deep)' }}>
+          Estate Operations Dashboard
+        </h1>
+        <p className="admin-page-subtitle" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1rem' }}>
+          Real-time analytics for Nethaji Upper Assam Tea harvests, orders & customer accounts
+        </p>
       </div>
 
       {/* Stats */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon green">🍃</div>
-          <div>
-            <div className="stat-value">{productCount}</div>
-            <div className="stat-label">Total Products</div>
+      <div className="stats-grid" style={{ marginBottom: '2.5rem' }}>
+        <div className="admin-metric-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+            <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Active Blends
+            </span>
+            <span style={{ fontSize: '1.5rem' }}>🍃</span>
+          </div>
+          <div className="admin-metric-value">{productCount}</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--tea-green)', marginTop: 4, fontWeight: 600 }}>
+            Assam Single-Origin Teas
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon brown">📦</div>
-          <div>
-            <div className="stat-value">{stats?.totalOrders ?? 0}</div>
-            <div className="stat-label">Total Orders</div>
+
+        <div className="admin-metric-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+            <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Total Orders
+            </span>
+            <span style={{ fontSize: '1.5rem' }}>📦</span>
+          </div>
+          <div className="admin-metric-value">{stats?.totalOrders ?? 0}</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--brown)', marginTop: 4, fontWeight: 600 }}>
+            Direct Dispatches
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon blue">👥</div>
-          <div>
-            <div className="stat-value">—</div>
-            <div className="stat-label">Total Users</div>
+
+        <div className="admin-metric-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+            <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Tea Connoisseurs
+            </span>
+            <span style={{ fontSize: '1.5rem' }}>👥</span>
+          </div>
+          <div className="admin-metric-value">{stats?.totalUsers ?? 0}</div>
+          <div style={{ fontSize: '0.75rem', color: '#1d4ed8', marginTop: 4, fontWeight: 600 }}>
+            Registered Customers
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon amber">💰</div>
-          <div>
-            <div className="stat-value">₹—</div>
-            <div className="stat-label">Revenue</div>
+
+        <div className="admin-metric-card" style={{ border: '1.5px solid var(--gold-border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+            <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Total Revenue
+            </span>
+            <span style={{ fontSize: '1.5rem' }}>💰</span>
+          </div>
+          <div className="admin-metric-value" style={{ color: 'var(--brown-dark)' }}>
+            ₹{stats?.totalRevenue ? stats.totalRevenue.toLocaleString('en-IN') : 0}
+          </div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--gold)', marginTop: 4, fontWeight: 700 }}>
+            Gross Tea Sales
           </div>
         </div>
       </div>

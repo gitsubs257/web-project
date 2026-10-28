@@ -187,14 +187,19 @@ export default function AdminCoupons() {
 
   return (
     <div>
-      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="admin-page-title">Coupons</h1>
-          <p className="admin-page-subtitle">{coupons.length} coupons</p>
+          <h1 className="admin-page-title" style={{ fontFamily: 'var(--font-display)', color: 'var(--tea-deep)' }}>
+            Promotional Vouchers & Coupons
+          </h1>
+          <p className="admin-page-subtitle" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1rem' }}>
+            {coupons.length} promotional discount voucher(s) active in system
+          </p>
         </div>
         <button
           id="create-coupon-btn"
           className="btn btn-primary"
+          style={{ minHeight: '44px' }}
           onClick={() => { setEditCoupon(null); setShowModal(true) }}
         >
           + Create Coupon

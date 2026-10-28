@@ -39,17 +39,30 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path
 
   return (
-    <nav className="navbar" aria-label="Main navigation">
-      <div className="navbar-inner">
-        {/* Brand / Logo */}
-        <Link to="/" className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <img
-            src="/logo.png"
-            alt="NTC Logo"
-            style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--gold)' }}
-          />
-          <span>Nethaji <span>Tea</span></span>
-        </Link>
+    <header className="site-header">
+      <div className="top-announcement-bar">
+        <span>🌿 <strong>100% Pure Assam Tea</strong> • Upper Assam Estates</span>
+        <span className="announcement-divider">•</span>
+        <span>🚚 <strong>Free Express Shipping</strong> Across India</span>
+        <span className="announcement-divider">•</span>
+        <span>📞 Helpline: <strong>+91 9443321952</strong></span>
+      </div>
+      <nav className="navbar" aria-label="Main navigation">
+        <div className="navbar-inner">
+          {/* Brand / Logo */}
+          <Link to="/" className="navbar-logo">
+            <div className="logo-img-frame">
+              <img
+                src="/logo.png"
+                alt="NTC Logo"
+                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+              />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+              <span style={{ fontSize: '1.25rem', letterSpacing: '0.04em' }}>Nethaji <span>Tea</span></span>
+              <span style={{ fontFamily: 'var(--font-script)', fontSize: '0.95rem', color: 'var(--gold-dark)', fontWeight: 400 }}>Est. 1985</span>
+            </div>
+          </Link>
 
         {/* Navigation links */}
         <div className="navbar-nav-links">
@@ -123,5 +136,37 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+
+    {/* Mobile App-Style Bottom Navigation Dock */}
+    <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
+      <Link to="/" id="mobile-nav-home" className={`mobile-nav-btn${isActive('/') ? ' active' : ''}`}>
+        <HomeIcon />
+        <span>Home</span>
+      </Link>
+      <a href="/#products" id="mobile-nav-teas" className="mobile-nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span>Assam Teas</span>
+      </a>
+      <Link to={isAuthenticated ? "/cart" : "/login"} id="mobile-nav-cart" className={`mobile-nav-btn${isActive('/cart') ? ' active' : ''}`}>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CartIcon />
+          {cartCount > 0 && <span className="mobile-cart-badge">{cartCount > 99 ? '99+' : cartCount}</span>}
+        </div>
+        <span>Cart</span>
+      </Link>
+      {isAuthenticated && (
+        <Link to="/orders" id="mobile-nav-orders" className={`mobile-nav-btn${isActive('/orders') ? ' active' : ''}`}>
+          <OrdersIcon />
+          <span>Orders</span>
+        </Link>
+      )}
+      <Link to={isAuthenticated ? "/account" : "/login"} id="mobile-nav-account" className={`mobile-nav-btn${isActive('/account') ? ' active' : ''}`}>
+        <AccountIcon />
+        <span>{isAuthenticated ? 'Account' : 'Login'}</span>
+      </Link>
+    </nav>
+    </header>
   )
 }

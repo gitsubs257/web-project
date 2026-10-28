@@ -139,45 +139,83 @@ export default function AccountPage() {
   return (
     <>
       <Navbar />
-      <main className="page-wrapper" style={{ paddingBottom: '4rem' }}>
-        <div className="container" style={{ paddingTop: '2rem', maxWidth: 860 }}>
-          <h1 className="section-title" style={{ marginBottom: '2rem' }}>My Account</h1>
+      <main className="page-wrapper" style={{ paddingBottom: '5rem', minHeight: 'calc(100vh - 200px)' }}>
+        <div className="container" style={{ paddingTop: '2.5rem', maxWidth: 880 }}>
+          {/* Luxury Page Header */}
+          <div className="luxury-page-header">
+            <h1 className="luxury-page-title">My Account & Preferences</h1>
+            <p className="luxury-page-subtitle">
+              Manage your profile, direct delivery addresses, and Assam tea reservations
+            </p>
+            <div className="luxury-gold-divider" />
+          </div>
+
+          {/* ── Connoisseur Profile Header Card ─────────────────── */}
+          <div className="connoisseur-profile-card">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <div className="connoisseur-avatar-ring">
+                <div className="connoisseur-avatar-inner">
+                  {profile?.firstName ? profile.firstName.charAt(0).toUpperCase() : 'N'}
+                  {profile?.lastName ? profile.lastName.charAt(0).toUpperCase() : 'T'}
+                </div>
+              </div>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.35rem' }}>
+                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', fontWeight: 700, margin: 0, color: '#fff' }}>
+                    {profile?.firstName} {profile?.lastName}
+                  </h2>
+                  <span className="connoisseur-tier-pill">
+                    👑 Assam Connoisseur
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.8)', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <span>✉️ {profile?.email}</span>
+                  {profile?.phone && <span>• 📞 +91 {profile.phone}</span>}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'rgba(247, 208, 112, 0.9)', marginTop: '0.5rem', fontStyle: 'italic', fontFamily: 'var(--font-serif)' }}>
+                  🌿 Dedicated Member of Nethaji Upper Assam Single-Origin Estate Club
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* ── Profile Card ─────────────────────────────────────── */}
-          <div className="card" style={{ marginBottom: '1.5rem' }}>
-            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span>👤 Profile</span>
+          <div className="card" style={{ marginBottom: '1.75rem', border: '1.5px solid rgba(197, 155, 39, 0.2)' }}>
+            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fafaf9', padding: '1rem 1.25rem' }}>
+              <span style={{ fontWeight: 700, color: 'var(--tea-deep)', fontFamily: 'var(--font-display)', fontSize: '0.95rem' }}>
+                👤 Personal Details
+              </span>
               {!editingProfile && (
                 <button id="edit-profile-btn" className="btn btn-secondary btn-sm" onClick={() => setEditingProfile(true)}>
-                  Edit Profile
+                  ✏️ Edit Profile
                 </button>
               )}
             </div>
-            <div className="card-body">
+            <div className="card-body" style={{ padding: '1.25rem' }}>
               {!editingProfile ? (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', fontSize: '0.9375rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.25rem', fontSize: '0.9375rem' }}>
                   <div>
-                    <div style={{ fontWeight: 600 }}>First Name</div>
-                    <div style={{ color: 'var(--gray-600)' }}>{profile?.firstName}</div>
+                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--gray-500)', marginBottom: 2 }}>First Name</div>
+                    <div style={{ fontWeight: 600, color: 'var(--gray-800)' }}>{profile?.firstName || '—'}</div>
                   </div>
                   <div>
-                    <div style={{ fontWeight: 600 }}>Last Name</div>
-                    <div style={{ color: 'var(--gray-600)' }}>{profile?.lastName}</div>
+                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--gray-500)', marginBottom: 2 }}>Last Name</div>
+                    <div style={{ fontWeight: 600, color: 'var(--gray-800)' }}>{profile?.lastName || '—'}</div>
                   </div>
                   <div>
-                    <div style={{ fontWeight: 600 }}>Email</div>
-                    <div style={{ color: 'var(--gray-600)' }}>{profile?.email}</div>
+                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--gray-500)', marginBottom: 2 }}>Email Address</div>
+                    <div style={{ fontWeight: 600, color: 'var(--gray-800)' }}>{profile?.email}</div>
                   </div>
                   <div>
-                    <div style={{ fontWeight: 600 }}>Phone</div>
-                    <div style={{ color: 'var(--gray-600)' }}>{profile?.phone || '—'}</div>
+                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--gray-500)', marginBottom: 2 }}>Phone Number</div>
+                    <div style={{ fontWeight: 600, color: 'var(--gray-800)' }}>{profile?.phone || 'Not added'}</div>
                   </div>
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                     <div className="form-group">
-                      <label className="form-label">First Name</label>
+                      <label className="form-label">First Name *</label>
                       <input
                         id="edit-first-name"
                         className="form-input"
@@ -186,7 +224,7 @@ export default function AccountPage() {
                       />
                     </div>
                     <div className="form-group">
-                      <label className="form-label">Last Name</label>
+                      <label className="form-label">Last Name *</label>
                       <input
                         id="edit-last-name"
                         className="form-input"
@@ -196,15 +234,16 @@ export default function AccountPage() {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Phone</label>
+                    <label className="form-label">Phone Number</label>
                     <input
                       id="edit-phone"
                       className="form-input"
+                      placeholder="10-digit mobile number"
                       value={profileForm.phone}
                       onChange={(e) => setProfileForm((p) => ({ ...p, phone: e.target.value }))}
                     />
                   </div>
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
                     <button id="save-profile-btn" className="btn btn-primary" onClick={handleSaveProfile} disabled={savingProfile}>
                       {savingProfile ? 'Saving...' : 'Save Changes'}
                     </button>
@@ -216,8 +255,8 @@ export default function AccountPage() {
           </div>
 
           {/* ── Addresses ────────────────────────────────────────── */}
-          <div className="card" style={{ marginBottom: '1.5rem' }}>
-            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="card" style={{ marginBottom: '1.75rem', border: '1.5px solid rgba(197, 155, 39, 0.2)' }}>
+            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fafaf9', padding: '1rem 1.25rem' }}>
               <span>📍 Saved Addresses</span>
               <button
                 id="add-address-btn"
@@ -403,8 +442,8 @@ export default function AccountPage() {
             </div>
           </div>
         </div>
-        <Footer />
       </main>
+      <Footer />
     </>
   )
 }

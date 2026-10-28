@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const Coupon = require('../models/Coupon');
+const User = require('../models/User');
 
 // ─── POST /api/orders ─────────────────────────────────────────────────────────
 const createOrder = async (req, res) => {
@@ -282,11 +283,19 @@ const getOrderStats = async (req, res) => {
   try {
     const totalOrders = await Order.countDocuments();
     const pendingCancellations = await Order.countDocuments({ 'cancellationRequest.status': 'Pending' });
+    const totalUsers = await User.countDocuments({ role: 'user' });
+
+    const revenueAgg = await Order.aggregate([
+      { $match: { status: { $nin: ['Cancelled', 'Failed'] } } },
+      { $group: { _id: null, total: { $sum: '$totalAmount' } } }
+    ]);
+    const totalRevenue = revenueAgg[0]?.total || 0;
+
     const recentOrders = await Order.find()
       .populate('user', 'firstName lastName email')
       .sort({ createdAt: -1 })
-      .limit(5);
-    res.json({ totalOrders, pendingCancellations, recentOrders });
+      .limit(6);
+    res.json({ totalOrders, pendingCancellations, totalUsers, totalRevenue, recentOrders });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }

@@ -276,17 +276,22 @@ export default function AdminProducts() {
 
   return (
     <div>
-      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="admin-page-title">Products</h1>
-          <p className="admin-page-subtitle">{products.length} products in catalogue</p>
+          <h1 className="admin-page-title" style={{ fontFamily: 'var(--font-display)', color: 'var(--tea-deep)' }}>
+            Assam Tea Catalogue
+          </h1>
+          <p className="admin-page-subtitle" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1rem' }}>
+            {products.length} single-origin Assam tea harvest blend(s) configured
+          </p>
         </div>
         <button
           id="add-product-btn"
           className="btn btn-primary"
+          style={{ minHeight: '44px' }}
           onClick={() => { setEditProduct(null); setShowModal(true) }}
         >
-          + Add Product
+          + Add Assam Blend
         </button>
       </div>
 

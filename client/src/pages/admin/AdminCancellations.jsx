@@ -82,7 +82,7 @@ export default function AdminCancellations() {
     <div>
       <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="admin-page-title" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <h1 className="admin-page-title" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontFamily: 'var(--font-display)', color: 'var(--tea-deep)' }}>
             <span>⚠️</span> Cancellation Requests
             {pendingList.length > 0 && (
               <span style={{ fontSize: '0.85rem', background: '#ef4444', color: '#fff', padding: '0.2rem 0.65rem', borderRadius: 'var(--radius-full)', fontWeight: 700 }}>
@@ -90,8 +90,8 @@ export default function AdminCancellations() {
               </span>
             )}
           </h1>
-          <p className="admin-page-subtitle">
-            Customer requested order cancellations. Approve to restock & cancel, or reject to continue processing.
+          <p className="admin-page-subtitle" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1rem' }}>
+            Customer requested order cancellations. Approve to restock & cancel, or reject to continue fulfillment.
           </p>
         </div>
 

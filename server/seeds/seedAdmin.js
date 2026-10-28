@@ -5,8 +5,13 @@
  * If admin already exists, it is skipped (idempotent).
  */
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
+const dns = require('dns');
 const mongoose = require('mongoose');
 const User = require('../models/User');
+
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+} catch (e) {}
 
 const seed = async () => {
   try {

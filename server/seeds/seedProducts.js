@@ -6,14 +6,19 @@
  * Idempotent: skips products that already exist (by name).
  */
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
+const dns = require('dns');
 const mongoose = require('mongoose');
 const Product = require('../models/Product');
+
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+} catch (e) {}
 
 const products = [
   {
     name: 'Varam Tea',
     description:
-      'Varam Tea is a premium blend of handpicked CTC tea leaves with a rich, bold flavor and strong aroma. Perfect for a hearty morning cup.',
+      'Varam Tea is an exquisite single-origin blend of handpicked Upper Assam CTC tea leaves with a rich, malty flavor, golden liquor, and robust morning aroma. Perfect for traditional milk chai or black tea.',
     image: 'uploads/varam-tea.jpg',
     category: 'CTC Tea',
     variants: [
@@ -27,7 +32,7 @@ const products = [
   {
     name: 'Top Rose Tea',
     description:
-      'Top Rose Tea offers a delicate floral fragrance blended with premium Assam tea leaves. A refreshing choice for afternoon tea lovers.',
+      'Top Rose Tea blends aromatic dried damask rose petals with select golden-tip Upper Assam CTC tea leaves. Delivers an enchanting floral bouquet with the deep brisk body of pure Assam tea.',
     image: 'uploads/top-rose-tea.jpg',
     category: 'CTC Tea',
     variants: [
@@ -41,7 +46,7 @@ const products = [
   {
     name: 'Subash Tea',
     description:
-      'Subash Tea is a classic everyday blend with a smooth, mellow taste and deep amber color. A household favourite for all age groups.',
+      'Subash Tea is our signature Brahmaputra River Valley everyday blend with a velvety smooth malty finish and rich amber color. A revered household staple across generations.',
     image: 'uploads/subash-tea.jpg',
     category: 'CTC Tea',
     variants: [
@@ -55,7 +60,7 @@ const products = [
   {
     name: 'Masala Tea',
     description:
-      'Nethaji Masala Tea is crafted with a special blend of ginger, cardamom, cinnamon, and clove spices mixed with strong CTC tea. A warming, spiced brew.',
+      'Nethaji Masala Tea fuses bold Upper Assam CTC tea leaves with slow-roasted traditional spices: sun-dried dry ginger, green cardamom, sweet cinnamon, and aromatic cloves. An invigorating, spiced elixir.',
     image: 'uploads/masala-tea.jpg',
     category: 'Masala Tea',
     variants: [
@@ -66,7 +71,7 @@ const products = [
   {
     name: 'Green Tea',
     description:
-      'Nethaji Green Tea is made from tender, unoxidized tea leaves that preserve natural antioxidants. Light, refreshing, and great for wellness.',
+      'Nethaji Green Tea is harvested from unoxidized tender Assam tea shoots, gently pan-steamed to lock in delicate antioxidants, polyphenols, and a fresh grassy sweetness.',
     image: 'uploads/green-tea.jpg',
     category: 'Green Tea',
     variants: [
