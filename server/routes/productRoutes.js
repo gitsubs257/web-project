@@ -11,6 +11,20 @@ const {
   updateProduct,
   deleteProduct,
 } = require('../controllers/productController');
+const {
+  createOrUpdateReview,
+  getProductReviews,
+  checkReviewEligibility,
+  getMyReviews,
+  deleteReview,
+} = require('../controllers/reviewController');
+
+// Customer review routes
+router.get('/reviews/my', authMiddleware, getMyReviews);
+router.get('/:productId/reviews', getProductReviews);
+router.get('/:productId/review-eligibility', authMiddleware, checkReviewEligibility);
+router.post('/:productId/reviews', authMiddleware, createOrUpdateReview);
+router.delete('/:productId/reviews/:reviewId', authMiddleware, deleteReview);
 
 // Public routes
 router.get('/', getProducts);

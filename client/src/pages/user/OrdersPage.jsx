@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import Navbar from '../../components/common/Navbar.jsx'
 import Footer from '../../components/common/Footer.jsx'
 import LoadingSpinner from '../../components/common/LoadingSpinner.jsx'
-import { getMyOrders, requestCancelOrder } from '../../services/api.js'
+import { getMyOrders, getMyReviews, requestCancelOrder } from '../../services/api.js'
 import { useToast } from '../../context/ToastContext.jsx'
+import ReviewModal from '../../components/user/ReviewModal.jsx'
 
 const STATUS_STEPS = ['Processing', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered']
 const STATUS_ICONS = {
@@ -50,7 +51,7 @@ function TrackingTimeline({ status }) {
   )
 }
 
-function OrderCard({ order, onCancelClick }) {
+function OrderCard({ order, onCancelClick, onReviewClick, myReviews }) {
   const [expanded, setExpanded] = useState(false)
   const isActive = !['Delivered', 'Cancelled', 'Failed'].includes(order.status)
   const isFailed = ['Cancelled', 'Failed'].includes(order.status)
@@ -164,23 +165,79 @@ function OrderCard({ order, onCancelClick }) {
           <h4 style={{ fontWeight: 600, marginBottom: '0.75rem', fontSize: '0.875rem', color: 'var(--gray-700)' }}>
             Items Ordered
           </h4>
-          {order.items.map((item, idx) => (
-            <div
-              key={idx}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                padding: '0.4rem 0',
-                borderBottom: idx < order.items.length - 1 ? '1px solid var(--gray-100)' : 'none',
-                fontSize: '0.875rem',
-              }}
-            >
-              <span style={{ color: 'var(--gray-700)' }}>
-                {item.name} ({item.variantWeight}) × {item.quantity}
-              </span>
-              <span style={{ fontWeight: 600 }}>₹{(item.price * item.quantity).toFixed(0)}</span>
-            </div>
-          ))}
+          {order.items.map((item, idx) => {
+            const itemProductId = item.product?._id || item.product
+            const existingReview = myReviews?.[itemProductId]
+            return (
+              <div
+                key={idx}
+                style={{
+                  padding: '0.65rem 0',
+                  borderBottom: idx < order.items.length - 1 ? '1px solid var(--gray-100)' : 'none',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.875rem' }}>
+                  <span style={{ color: 'var(--gray-800)', fontWeight: 600 }}>
+                    {item.name} <span style={{ color: 'var(--gray-500)', fontWeight: 400 }}>({item.variantWeight})</span> × {item.quantity}
+                  </span>
+                  <span style={{ fontWeight: 700, color: 'var(--tea-deep)' }}>₹{(item.price * item.quantity).toFixed(0)}</span>
+                </div>
+
+                {order.status === 'Delivered' && (
+                  <div
+                    style={{
+                      marginTop: '0.5rem',
+                      padding: '0.45rem 0.75rem',
+                      background: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: 'var(--radius-md)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78125rem' }}>
+                      <span style={{ color: '#16a34a', fontWeight: 700 }}>✓ Delivered</span>
+                      {existingReview ? (
+                        <span style={{ color: '#ca8a04', fontWeight: 600 }}>
+                          · You rated: {'★'.repeat(existingReview.rating)} ({existingReview.rating}/5)
+                        </span>
+                      ) : (
+                        <span style={{ color: 'var(--gray-500)' }}>
+                          · How was your tea? Share your feedback
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      id={`review-btn-${order._id}-${itemProductId}`}
+                      className="btn btn-sm"
+                      style={{
+                        fontSize: '0.75rem',
+                        padding: '0.3rem 0.75rem',
+                        height: 'auto',
+                        borderRadius: 'var(--radius-full)',
+                        background: existingReview ? '#ffffff' : 'linear-gradient(135deg, var(--tea-green), var(--tea-deep))',
+                        color: existingReview ? 'var(--tea-deep)' : '#ffffff',
+                        border: existingReview ? '1.5px solid var(--gold-border)' : 'none',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        boxShadow: existingReview ? 'none' : '0 2px 6px rgba(18, 40, 26, 0.2)',
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onReviewClick(item, order._id, existingReview)
+                      }}
+                    >
+                      {existingReview ? '✏️ Edit Review' : '⭐ Write Review'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )
+          })}
 
           {/* Address */}
           {order.shippingAddress && (
@@ -367,14 +424,32 @@ function CancelOrderModal({ order, onClose, onSuccess }) {
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([])
+  const [myReviews, setMyReviews] = useState({})
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('current')
   const [selectedCancelOrder, setSelectedCancelOrder] = useState(null)
+  const [reviewTarget, setReviewTarget] = useState({
+    isOpen: false,
+    product: null,
+    orderId: null,
+    existingReview: null,
+  })
 
   const fetchOrders = async () => {
     try {
-      const res = await getMyOrders()
-      setOrders(res.data)
+      const [ordersRes, reviewsRes] = await Promise.all([
+        getMyOrders(),
+        getMyReviews().catch(() => ({ data: [] })),
+      ])
+      setOrders(ordersRes.data || [])
+      const rMap = {}
+      if (Array.isArray(reviewsRes.data)) {
+        reviewsRes.data.forEach((r) => {
+          const pid = r.product?._id || r.product
+          if (pid) rMap[pid] = r
+        })
+      }
+      setMyReviews(rMap)
     } catch {
       // handle silently
     } finally {
@@ -390,6 +465,27 @@ export default function OrdersPage() {
     setOrders((prev) =>
       prev.map((o) => (o._id === updatedOrder._id ? updatedOrder : o))
     )
+  }
+
+  const handleOpenReview = (item, orderId, existingReview) => {
+    setReviewTarget({
+      isOpen: true,
+      product: {
+        _id: item.product?._id || item.product,
+        name: item.name,
+        image: item.image,
+        variantWeight: item.variantWeight,
+      },
+      orderId,
+      existingReview,
+    })
+  }
+
+  const handleReviewSuccess = (savedReview) => {
+    const pid = savedReview.product?._id || savedReview.product
+    if (pid) {
+      setMyReviews((prev) => ({ ...prev, [pid]: savedReview }))
+    }
   }
 
   const currentOrders   = orders.filter((o) => !['Delivered', 'Cancelled', 'Failed'].includes(o.status))
@@ -464,6 +560,8 @@ export default function OrdersPage() {
                   key={order._id}
                   order={order}
                   onCancelClick={(ord) => setSelectedCancelOrder(ord)}
+                  onReviewClick={handleOpenReview}
+                  myReviews={myReviews}
                 />
               ))}
             </div>
@@ -477,6 +575,18 @@ export default function OrdersPage() {
           order={selectedCancelOrder}
           onClose={() => setSelectedCancelOrder(null)}
           onSuccess={handleOrderUpdate}
+        />
+      )}
+
+      {/* Product Review Modal (Only for delivered orders) */}
+      {reviewTarget.isOpen && (
+        <ReviewModal
+          isOpen={reviewTarget.isOpen}
+          product={reviewTarget.product}
+          orderId={reviewTarget.orderId}
+          existingReview={reviewTarget.existingReview}
+          onClose={() => setReviewTarget((prev) => ({ ...prev, isOpen: false }))}
+          onSuccess={handleReviewSuccess}
         />
       )}
 

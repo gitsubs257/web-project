@@ -15,6 +15,8 @@ const productSchema = new mongoose.Schema(
     image:       { type: String, default: '' },
     category:    { type: String, default: 'Tea' },
     variants:    [variantSchema],
+    ratings:     { type: Number, default: 0, min: 0, max: 5 },
+    numReviews:  { type: Number, default: 0, min: 0 },
     isActive:    { type: Boolean, default: true },
   },
   { timestamps: true }

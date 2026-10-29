@@ -52,6 +52,13 @@ export const updateProduct = (id, formData) =>
   api.put(`/products/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
 export const deleteProduct = (id) => api.delete(`/products/${id}`)
 
+// ── Product Reviews ────────────────────────────────────────────────────────
+export const getProductReviews = (productId) => api.get(`/products/${productId}/reviews`)
+export const getReviewEligibility = (productId) => api.get(`/products/${productId}/review-eligibility`)
+export const submitProductReview = (productId, data) => api.post(`/products/${productId}/reviews`, data)
+export const getMyReviews = () => api.get('/products/reviews/my')
+export const deleteProductReview = (productId, reviewId) => api.delete(`/products/${productId}/reviews/${reviewId}`)
+
 // ── Cart ────────────────────────────────────────────────────────────────────
 export const getCart = () => api.get('/cart')
 export const addToCart = (data) => api.post('/cart', data)

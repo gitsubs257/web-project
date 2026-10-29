@@ -86,10 +86,22 @@ export default function ProductCard({ product }) {
       <div className="product-card-body">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span className="product-card-category">{product.category}</span>
-          <div style={{ fontSize: '0.72rem', color: '#eab308', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-            <span>★★★★★</span>
-            <span style={{ color: 'var(--gray-500)', fontSize: '0.68rem', fontWeight: 600 }}>4.9</span>
-          </div>
+          {product.numReviews > 0 ? (
+            <div style={{ fontSize: '0.72rem', color: '#eab308', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <span>★</span>
+              <span style={{ color: 'var(--gray-800)', fontSize: '0.72rem', fontWeight: 700 }}>
+                {(product.ratings || 0).toFixed(1)}
+              </span>
+              <span style={{ color: 'var(--gray-400)', fontSize: '0.68rem', fontWeight: 500 }}>
+                ({product.numReviews})
+              </span>
+            </div>
+          ) : (
+            <div style={{ fontSize: '0.72rem', color: 'var(--gray-400)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <span style={{ color: '#eab308' }}>★</span>
+              <span style={{ fontSize: '0.68rem', fontWeight: 500 }}>New Arrival</span>
+            </div>
+          )}
         </div>
         <h3
           className="product-card-name"
